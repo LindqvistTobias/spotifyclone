@@ -1,8 +1,25 @@
 import { Height } from '@mui/icons-material';
 import { Box, Grid, Divider } from '@mui/material';
-import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import SongRow from '../SongRow/SongRow';
 
-const SongTable = ({}) => {
+const SongTable = ({ songs, loading, spotifyApi }) => {
+
+	const renderSongs = () => {
+		if(loading) {
+			return [1,2,3,4,5].map((e, i) => <SongRow loading={loading} key={i} i={i} images={null} />)
+		}
+
+		return songs.map((song, i) => <SongRow 
+			album={song.album.name}
+			images={song.album.images}
+			title={song.name}
+			artist={song.artists[0].name}
+			duration={song.duration_ms / 1000}
+			key={i}
+			i={i}
+		/>)
+	};
 	return (
 		<Box
 			p={{ xs: 3, md: 4 }}
@@ -24,12 +41,13 @@ const SongTable = ({}) => {
 					Album
 				</Grid>
 				<Grid xs={3} item sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-					<AccessTimeIcon sx={{width: 20, height: 20}} />
+					<AccessTimeIcon sx={{ width: 20, height: 20 }} />
 				</Grid>
 			</Grid>
-            <Box pb={2}>
-                <Divider sx={{width: '100%', height: 1}} />
-            </Box>
+			<Box pb={2}>
+				<Divider sx={{ width: '100%', height: 1 }} />
+			</Box>
+			{renderSongs()}
 		</Box>
 	);
 };
