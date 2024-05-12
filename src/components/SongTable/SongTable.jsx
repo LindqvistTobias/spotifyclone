@@ -4,24 +4,25 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SongRow from '../SongRow/SongRow';
 
 const SongTable = ({ songs, loading, spotifyApi }) => {
-
 	const renderSongs = () => {
-		if(loading) {
-			return [1,2,3,4,5].map((e, i) => <SongRow loading={loading} key={i} i={i} images={null} />)
+		if (loading) {
+			return [1, 2, 3, 4, 5].map((e, i) => <SongRow loading={loading} key={i} i={i} images={null} />);
 		}
 
-		return songs.map((song, i) => <SongRow 
-			album={song.album.name}
-			images={song.album.images}
-			title={song.name}
-			artist={song.artists[0].name}
-			duration={song.duration_ms / 1000}
-			key={i}
-			i={i}
-			position={song.position}
-			contextUri={song.contextUri}
-			spotifyApi={spotifyApi}
-		/>)
+		return songs.map((song, i) => (
+			<SongRow
+				album={song.album.name}
+				images={song.album.images}
+				title={song.name}
+				artist={song.artists[0].name}
+				duration={song.duration_ms / 1000}
+				key={i}
+				i={i}
+				position={song.position}
+				contextUri={song.contextUri}
+				spotifyApi={spotifyApi}
+			/>
+		));
 	};
 	return (
 		<Box

@@ -1,6 +1,8 @@
 import { Box, Grid, Typography, Avatar } from '@mui/material';
 import { useEffect, useState } from 'react';
 import PlayerControls from '../PlayerControls/PlayerControls';
+import PlayerVolume from '../PlayerVolume/PlayerVolume';
+import PlayerOverlay from '../PlayerOverlay/PlayerOverlay';
 
 const Player = ({ spotifyApi, token }) => {
 	const [localPlayer, setLocalPlayer] = useState();
@@ -10,6 +12,7 @@ const Player = ({ spotifyApi, token }) => {
 	const [duration, setDuration] = useState();
 	const [progress, setProgress] = useState();
 	const [active, setActive] = useState();
+	const [playerOverlayIsOpen, setPlayerOverlayIsOpen] = useState(false);
 
 	useEffect(() => {
 		const script = document.createElement('script');
@@ -40,8 +43,7 @@ const Player = ({ spotifyApi, token }) => {
 			player.addListener('player_state_changed', (state) => {
 				if (!state || !state.track_window?.current_track) {
 					return;
-				}
-				console.log(state);
+				}				
 
 				const duration = state.track_window.current_track.duration_ms / 1000;
 				const progress = state.position / 1000;
@@ -85,6 +87,7 @@ const Player = ({ spotifyApi, token }) => {
 	return (
 		<Box>
 			<Grid
+				onClick={() => setPlayerOverlayIsOpen((prevState) => !prevState)}
 				container
 				px={3}
 				sx={{
@@ -129,10 +132,25 @@ const Player = ({ spotifyApi, token }) => {
 						<Box>Please transfer Playback</Box>
 					)}
 				</Grid>
-				<Grid xs={6} md={4} item sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-					Volume
+				<Grid
+					xs={6}
+					md={4}
+					item
+					sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', justifyContent: 'flex-end' }}
+				>
+					<PlayerVolume player={localPlayer} />
 				</Grid>
 			</Grid>
+			<PlayerOverlay
+				playerOverlayIsOpen={playerOverlayIsOpen}
+				closeOverlay={() => setPlayerOverlayIsOpen(false)}
+				progress={progress}
+				is_paused={is_paused}
+				duration={duration}
+				player={localPlayer}
+				current_track={current_track}
+				active={active}
+			/>
 		</Box>
 	);
 };

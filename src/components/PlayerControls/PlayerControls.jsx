@@ -1,4 +1,4 @@
-import { Stack, Typography, Slider, Box, IconButton } from '@mui/material';
+import { Stack, Typography, Slider, IconButton } from '@mui/material';
 import { formatTime } from '../../utils/formatTime';
 import { PlayArrow, SkipNext, SkipPrevious, Pause } from '@mui/icons-material';
 import { useEffect, useState } from 'react';

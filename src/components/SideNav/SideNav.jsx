@@ -31,7 +31,7 @@ const SideNav = ({ spotifyApi, token }) => {
 
     return (
         <Box sx={{ 
-                display: 'flex',
+                display: {xs: 'none', md: 'flex' },
                 backgroundColor: 'background.default',
                 width: 230,
                 height: '100%',

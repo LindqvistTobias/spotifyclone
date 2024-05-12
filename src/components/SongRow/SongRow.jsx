@@ -1,17 +1,25 @@
 import { Grid, Avatar, Box, Typography, Skeleton } from '@mui/material';
 import { formatTime } from '../../utils/formatTime';
 
-
-const SongRow = ({ images, title, artist, album, duration, i, loading, position, contextUri, spotifyApi}) => {
+const SongRow = ({ images, title, artist, album, duration, i, loading, position, contextUri, spotifyApi }) => {
 	const image = images?.length > 0 ? images[0].url : null;
 
-    const onRowClick = async () => {
-        const song = { context_uri: contextUri, offset: { position: position }, position_ms: 0  }
-        await spotifyApi.play(song)
-    }
+	const onRowClick = async () => {
+		const song = {
+			context_uri: contextUri,
+			offset: { position },
+			position_ms: 0,
+			title,
+			image: image ? image : {},
+			artist,
+			duration,
+			position
+		};
+		await spotifyApi.play(song);
+	};
 	return (
 		<Grid
-            onClick={onRowClick}
+			onClick={onRowClick}
 			container
 			px={2}
 			py={1}
@@ -42,10 +50,10 @@ const SongRow = ({ images, title, artist, album, duration, i, loading, position,
 				</Box>
 			</Grid>
 			<Grid xs={3} item sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
-                 {loading ? <Skeleton variant="text" width={50} height={24} /> : album}
+				{loading ? <Skeleton variant="text" width={50} height={24} /> : album}
 			</Grid>
 			<Grid xs={3} item sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                  {loading ? <Skeleton variant="text" width={30} height={24} /> : formatTime(duration)}
+				{loading ? <Skeleton variant="text" width={30} height={24} /> : formatTime(duration)}
 			</Grid>
 		</Grid>
 	);
