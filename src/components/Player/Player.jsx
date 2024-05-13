@@ -1,20 +1,22 @@
 import { Box, Grid, Typography, Avatar } from '@mui/material';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PlayerControls from '../PlayerControls/PlayerControls';
 import PlayerVolume from '../PlayerVolume/PlayerVolume';
 import PlayerOverlay from '../PlayerOverlay/PlayerOverlay';
+import { getAccessTokenFromStorage } from '../../utils/getAccessTokenFromStorage';
 
-const Player = ({ spotifyApi, token }) => {
-	const [localPlayer, setLocalPlayer] = useState();
+const Player = ({ spotifyApi }) => {
+	const [localPlayer, setLocalPlayer] = useState(null);
 	const [is_paused, setIsPaused] = useState(false);
-	const [current_track, setCurrentTrack] = useState();
-	const [device, setDevice] = useState();
-	const [duration, setDuration] = useState();
-	const [progress, setProgress] = useState();
-	const [active, setActive] = useState();
+	const [current_track, setCurrentTrack] = useState(null);
+	const [device, setDevice] = useState(null);
+	const [duration, setDuration] = useState(null);
+	const [progress, setProgress] = useState(null);
+	const [active, setActive] = useState(null);
 	const [playerOverlayIsOpen, setPlayerOverlayIsOpen] = useState(false);
 
 	useEffect(() => {
+		const token = getAccessTokenFromStorage();
 		const script = document.createElement('script');
 		script.src = 'https://sdk.scdn.co/spotify-player.js';
 		script.async = true;
@@ -49,14 +51,16 @@ const Player = ({ spotifyApi, token }) => {
 				const progress = state.position / 1000;
 				setDuration(duration);
 				setProgress(progress);
-				setIsPaused(state.paused);
 				setCurrentTrack(state.track_window.current_track);
+				setIsPaused(state.paused);
+				
 
 				player.getCurrentState().then((state) => {
 					!state ? setActive(false) : setActive(true);
 				});
 			});
 
+			setLocalPlayer(player);
 			player.connect();
 		};
 	}, []);
@@ -73,16 +77,19 @@ const Player = ({ spotifyApi, token }) => {
 		};
 	}, [localPlayer]);
 
-	// useEffect(() => {
-	// 	const transferPlayback = async () => {
-	// 		if (device) {
-	// 			const res = await spotifyApi.getMyDevices();
-	// 			console.log(res);
-	// 			await spotifyApi.transferMyPlayback([device], false);
-	// 		}
-	// 	};
-	// 	transferPlayback();
-	// }, [device, spotifyApi]);
+	
+	useEffect(() => {
+		const transferMyPlayback = async () => {
+			if (device) {
+				await spotifyApi.transferMyPlayback([device], true);
+			}
+		};
+		const getDeviceFromApi = async () => {
+			await spotifyApi.getMyDevices();
+		};
+		getDeviceFromApi();
+		transferMyPlayback();
+	}, [device, spotifyApi]);
 
 	return (
 		<Box>
