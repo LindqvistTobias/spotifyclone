@@ -16,9 +16,9 @@ const Player = ({ spotifyApi }) => {
 	const [playerOverlayIsOpen, setPlayerOverlayIsOpen] = useState(false);
 
 	useEffect(() => {
-		const token = getAccessTokenFromStorage();
+		const token = getAccessTokenFromStorage();	
 		const script = document.createElement('script');
-		script.src = 'https://sdk.scdn.co/spotify-player.js';
+		script.src = "https://sdk.scdn.co/spotify-player.js";
 		script.async = true;
 
 		document.body.appendChild(script);
@@ -26,10 +26,8 @@ const Player = ({ spotifyApi }) => {
 		window.onSpotifyWebPlaybackSDKReady = () => {
 			const player = new window.Spotify.Player({
 				name: 'Lokwave Player',
-				getOAuthToken: (cb) => {
-					cb(token);
-				},
-				volume: 0.5
+				getOAuthToken: cb => { cb(token); },
+                volume: 0.5				
 			});
 
 			player.addListener('ready', ({ device_id }) => {
@@ -60,7 +58,7 @@ const Player = ({ spotifyApi }) => {
 				});
 			});
 
-			setLocalPlayer(player);
+			setLocalPlayer(player);			
 			player.connect();
 		};
 	}, []);

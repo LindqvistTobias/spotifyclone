@@ -9,7 +9,7 @@ const PlayerOverlay = ({ playerOverlayIsOpen, closeOverlay, progress, is_paused,
 			sx={{
 				width: '100%',
 				height: 'calc(100vh - 75px)',
-				backgroundColor: 'background.paper',
+				bgcolor: 'background.paper',
 				display: {
 					xs: 'block',
 					md: 'none'
@@ -21,7 +21,7 @@ const PlayerOverlay = ({ playerOverlayIsOpen, closeOverlay, progress, is_paused,
 				transform: playerOverlayIsOpen ? 'translateY(0px)' : 'translateY(100vh)'
 			}}
 		>
-			<Container sx={{ height: '100%', background: 'linear-gradient(0deg, #121212 0%, #F0790050 100%' }}>
+			<Container sx={{ height: '100%', background: 'linear-gradient(0deg, #121212 0%, #F0790050 100%);' }}>
 				<Grid container direction="column" justifyContent="space-between" sx={{ height: '100%' }}>
 					<Grid item xs={1} sx={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
 						<IconButton onClick={closeOverlay} sx={{ paddingLeft: 0 }}>

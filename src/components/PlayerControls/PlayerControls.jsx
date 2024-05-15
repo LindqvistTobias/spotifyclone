@@ -3,12 +3,10 @@ import { formatTime } from '../../utils/formatTime';
 import { PlayArrow, SkipNext, SkipPrevious, Pause } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 
-const PlayerControls = ({ progress, is_paused, duration, player }) => {
+const PlayerControls = ({ player, is_paused, duration, progress }) => {
 	const [currentProgress, setCurrentProgress] = useState(progress);
 	const skipStyle = { width: 28, height: 28 };
 	const playStyle = { width: 38, height: 38 };
-
-	console.log(player)
 
 	useEffect(() => {
 		const intervalId = setInterval(() => {
