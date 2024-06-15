@@ -10,14 +10,12 @@ import MobileNav from '../MobileNav/MobileNav';
 import Library from '../../pages/Library';
 
 const Dashboard = ({ spotifyApi }) => {	
-	const [loading, setLoading] = useState(false);	
-	const token = getAccessTokenFromStorage()	
-	console.log(token)
+	const [loading, setLoading] = useState(true);	
+	const token = getAccessTokenFromStorage()		
 
 	useEffect(() => {
 		const onMount = async () => {
-		  await spotifyApi.setAccessToken(token);
-		  console.log(spotifyApi)
+		  await spotifyApi.setAccessToken(token);		  
 		}
 	
 		if (token) {
