@@ -9,20 +9,24 @@ import Player from '../Player/Player';
 import MobileNav from '../MobileNav/MobileNav';
 import Library from '../../pages/Library';
 
-const Dashboard = ({ spotifyApi }) => {
-	const token = useState(getAccessTokenFromStorage());
-	const [loading, setLoading] = useState(true);
+const Dashboard = ({ spotifyApi }) => {	
+	const [loading, setLoading] = useState(false);	
+	const token = getAccessTokenFromStorage()	
+	console.log(token)
 
 	useEffect(() => {
 		const onMount = async () => {
-			await spotifyApi.setAccessToken(token);
-			setLoading(false)
-		};
-
+		  await spotifyApi.setAccessToken(token);
+		  console.log(spotifyApi)
+		}
+	
 		if (token) {
 			onMount();
+			setLoading(false)
 		}
-	}, []);
+	  }, []);
+
+
 
 	return (
 		<Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -40,7 +44,7 @@ const Dashboard = ({ spotifyApi }) => {
 					</>
 				)}				
 			</Box>
-			{token && !loading && <Player spotifyApi={spotifyApi} />}
+			{token && !loading && <Player spotifyApi={spotifyApi} token={token}/>}
 			<MobileNav />
 		</Box>
 	);

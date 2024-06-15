@@ -8,21 +8,22 @@ import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 function App({ spotifyApi }) {
-	const [token, setToken] = useState(getAccessTokenFromStorage());
+	const [token, setToken] = useState(getAccessTokenFromStorage());	
 
 	useEffect(() => {
 		const accessToken = getAccessTokenFromStorage() || getAccessToken();
 		if(accessToken) {
 			setToken(accessToken);
 			sessionStorage.setItem('spotifyToken', accessToken);
-			window.location.hash = '';
+			window.location.hash = '';			
 		}
 	}, []);
+
 
 	return (
 		<Box className="App">
 			{token ? (
-				<Dashboard spotifyApi={spotifyApi} />
+				<Dashboard spotifyApi={spotifyApi} token={token} />
 			) : (
 				<Routes>
 					<Route path="*" element={<Login />} />

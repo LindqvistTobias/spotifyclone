@@ -11,8 +11,7 @@ const Playlist = ({ spotifyApi, token }) => {
 
 	const formatSongs = useCallback(
 		(items) =>
-			items.map((item, i) => {
-				console.log({ item, i });
+			items.map((item, i) => {				
 				const { track } = item;
 				track.contextUri = `spotify:playlist:${id}`;
 				track.position = i;
@@ -29,8 +28,7 @@ const Playlist = ({ spotifyApi, token }) => {
 				setPlaylistInfo({
 					image: playlistDetails.body.images[0].url,
 					name: playlistDetails.body.name
-				});
-				console.log(playlistDetails);
+				});				
 				const { items } = playlistDetails.body.tracks;
 				// Format songs
 				const formattedSongs = formatSongs(items);

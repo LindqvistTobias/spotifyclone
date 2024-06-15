@@ -4,6 +4,7 @@ import { PlayArrow, SkipNext, SkipPrevious, Pause } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 
 const PlayerControls = ({ player, is_paused, duration, progress }) => {
+	console.log(player)
 	const [currentProgress, setCurrentProgress] = useState(progress);
 	const skipStyle = { width: 28, height: 28 };
 	const playStyle = { width: 38, height: 38 };
@@ -38,7 +39,9 @@ const PlayerControls = ({ player, is_paused, duration, progress }) => {
 					size="small"
 					sx={{ color: 'text.primary' }}
 					onClick={() => {
+						console.log(player)
 						player.togglePlay();
+
 					}}
 				>
 					{is_paused ? <PlayArrow sx={playStyle} /> : <Pause sx={playStyle} />}

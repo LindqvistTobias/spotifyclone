@@ -5,7 +5,7 @@ import PlayerVolume from '../PlayerVolume/PlayerVolume';
 import PlayerOverlay from '../PlayerOverlay/PlayerOverlay';
 import { getAccessTokenFromStorage } from '../../utils/getAccessTokenFromStorage';
 
-const Player = ({ spotifyApi }) => {
+const Player = ({ spotifyApi, token }) => {
 	const [localPlayer, setLocalPlayer] = useState(null);
 	const [is_paused, setIsPaused] = useState(false);
 	const [current_track, setCurrentTrack] = useState(null);
@@ -15,27 +15,30 @@ const Player = ({ spotifyApi }) => {
 	const [active, setActive] = useState(null);
 	const [playerOverlayIsOpen, setPlayerOverlayIsOpen] = useState(false);
 
-	useEffect(() => {
-		const token = getAccessTokenFromStorage();	
+	useEffect(() => {							
 		const script = document.createElement('script');
 		script.src = "https://sdk.scdn.co/spotify-player.js";
 		script.async = true;
 
 		document.body.appendChild(script);
+		
 
 		window.onSpotifyWebPlaybackSDKReady = () => {
 			const player = new window.Spotify.Player({
 				name: 'Lokwave Player',
-				getOAuthToken: cb => { cb(token); },
-                volume: 0.5				
-			});
-
+				getOAuthToken: (cb) => {
+					cb(token);
+				  },
+                volume: 0.5	
+			});		
+			
 			player.addListener('ready', ({ device_id }) => {
 				console.log('Ready with Device ID', device_id);
 				setDevice(device_id);
 				setLocalPlayer(player);
-			});
-
+			});	
+			
+			
 			player.addListener('not_ready', ({ device_id }) => {
 				console.log('Device ID has gone offline', device_id);
 			});
@@ -56,28 +59,31 @@ const Player = ({ spotifyApi }) => {
 				player.getCurrentState().then((state) => {
 					!state ? setActive(false) : setActive(true);
 				});
-			});
-
-			setLocalPlayer(player);			
-			player.connect();
-		};
-	}, []);
+			});			
+			setLocalPlayer(player);
+			player.connect()		
+			};
+	}, []);	
 
 	useEffect(() => {
-		if (!localPlayer) return;
-		async function connect() {
-			await localPlayer.connect();
+		if (!localPlayer) {
+		  return;
 		}
-
-		connect();
-		return () => {
-			localPlayer.disconnect();
-		};
-	}, [localPlayer]);
-
 	
-	useEffect(() => {
-		const transferMyPlayback = async () => {
+		async function connect() {
+		  await localPlayer.connect();
+		}
+	
+		connect();
+	
+		return () => {
+		  localPlayer.disconnect();
+		};
+	  }, [localPlayer]);
+
+	  
+	useEffect(() => {		
+		const transferPlayback = async () => {
 			if (device) {
 				await spotifyApi.transferMyPlayback([device], true);
 			}
@@ -86,8 +92,8 @@ const Player = ({ spotifyApi }) => {
 			await spotifyApi.getMyDevices();
 		};
 		getDeviceFromApi();
-		transferMyPlayback();
-	}, [device, spotifyApi]);
+		transferPlayback();
+	}, [device]);
 
 	return (
 		<Box>
